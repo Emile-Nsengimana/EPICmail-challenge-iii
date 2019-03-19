@@ -2,7 +2,6 @@
 import uuid from 'uuid/v4';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import encrypt from 'bcryptjs';
 import user from '../models/user';
 import con from '../../connection';
 
@@ -11,7 +10,7 @@ dotenv.config();
 class userController {
   static async userSignup(req, res) {
     const userId = uuid();
-    const token = jwt.sign(userId, process.env.SALT);
+    const token = jwt.sign(userId, process.env.NEVERMIND);
     const {
       firstName,
       lastName,
@@ -21,8 +20,8 @@ class userController {
     } = req.body;
     const result = await con.query(user.saveUser, [userId, firstName, lastName, email, password, phoneNo]);
     if (result.rowCount === 0) {
-      return res.status(401).json({
-        status: 401,
+      return res.status(400).json({
+        status: 400,
         message: 'Error',
       });
     }
@@ -50,7 +49,7 @@ class userController {
     const { email, password } = req.body;
     const userLogin = await con.query(user.returnUser, [email]);
     if (userLogin.rowCount !== 0) {
-      const loginToken = jwt.sign(userLogin.rows[0].userid, process.env.SALT);
+      const loginToken = jwt.sign(userLogin.rows[0].userid, process.env.NEVERMIND);
 
       if (userLogin.rows[0].password === password) {
         return res.status(200).json({
