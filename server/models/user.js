@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS
         firstName varchar(30) NOT NULL,
         lastName varchar(25) NOT NULL,
         email varchar(30) UNIQUE,
-        password varchar(20) NOT NULL,
+        password varchar(100) NOT NULL,
         phoneNo varchar(12)
     )`;
 const saveUser = `insert into userAccount (
@@ -19,11 +19,9 @@ const saveUser = `insert into userAccount (
 
 const removeUser = 'delete from userAccount where email = ($1)';
 const returnUser = 'select * from userAccount where email = ($1)';
-const updateUser = 'update useraccount set firstname = ($1), lastname=($2), email=($3), password=($4), phoneno=($5) where userId =($6)';
 export default {
   userTable,
   saveUser,
   removeUser,
   returnUser,
-  updateUser,
 };
