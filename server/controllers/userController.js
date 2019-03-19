@@ -45,5 +45,30 @@ class userController {
       data: 'user removed',
     });
   }
+
+  static async login(req, res) {
+    const { email, password } = req.body;
+    const userLogin = await con.query(user.returnUser, [email]);
+    if (userLogin.rowCount !== 0) {
+      const loginToken = jwt.sign(userLogin.rows[0].userid, process.env.SALT);
+
+      if (userLogin.rows[0].password === password) {
+        return res.status(200).json({
+          status: 200,
+          data: [{
+            token: loginToken,
+          }],
+        });
+      }
+      return res.status(401).json({
+        status: 401,
+        data: 'incorrect username or password',
+      });
+    }
+    return res.status(400).json({
+      status: 400,
+      data: 'user doen\'t exist',
+    });
+  }
 }
 export default userController;
