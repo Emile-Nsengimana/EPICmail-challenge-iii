@@ -32,7 +32,7 @@ class messageController {
         } catch (error) {
           return res.status(400).json({
             status: 500,
-            message: [error.detail],
+            data: [error.detail],
           });
         }
       } else if (status === 'sent') {

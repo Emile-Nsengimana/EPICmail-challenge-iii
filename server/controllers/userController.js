@@ -10,7 +10,6 @@ dotenv.config();
 class userController {
   static async userSignup(req, res) {
     const userId = uuid();
-    const token = jwt.sign(userId, process.env.NEVERMIND, { expiresIn: '1day' });
     const {
       firstName,
       lastName,
@@ -25,6 +24,7 @@ class userController {
         message: 'Error',
       });
     }
+    const token = jwt.sign(userId, process.env.NEVERMIND);
     return res.status(201).json({
       status: 201,
       data: [{ token }],
@@ -48,9 +48,9 @@ class userController {
   static async login(req, res) {
     const { email, password } = req.body;
     const userLogin = await con.query(user.returnUser, [email]);
+    const usrIds = userLogin.rows[0].userid;
     if (userLogin.rowCount !== 0) {
-      const loginToken = jwt.sign(userLogin.rows[0].userid, process.env.NEVERMIND, { expiresIn: '24h' });
-
+      const loginToken = jwt.sign(usrIds, process.env.NEVERMIND);
       if (userLogin.rows[0].password === password) {
         return res.status(200).json({
           status: 200,
