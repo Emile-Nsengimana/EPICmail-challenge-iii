@@ -10,7 +10,7 @@ dotenv.config();
 class userController {
   static async userSignup(req, res) {
     const userId = uuid();
-    const token = jwt.sign(userId, process.env.NEVERMIND);
+    const token = jwt.sign(userId, process.env.NEVERMIND, { expiresIn: '1day' });
     const {
       firstName,
       lastName,
@@ -49,7 +49,7 @@ class userController {
     const { email, password } = req.body;
     const userLogin = await con.query(user.returnUser, [email]);
     if (userLogin.rowCount !== 0) {
-      const loginToken = jwt.sign(userLogin.rows[0].userid, process.env.NEVERMIND);
+      const loginToken = jwt.sign(userLogin.rows[0].userid, process.env.NEVERMIND, { expiresIn: '24h' });
 
       if (userLogin.rows[0].password === password) {
         return res.status(200).json({

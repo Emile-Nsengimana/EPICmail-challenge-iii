@@ -21,18 +21,31 @@ class messageController {
       email,
       token,
     } = req.body;
+
     const findUser = await con.query(user.returnUser, [email]);
     const ownerId = jwt.sign(findUser.rows[0].userid, process.env.NEVERMIND);
     if (ownerId === token) {
       const result = await con.query(messageModel.addMessage, [messageId, subject, message, parentMessageId, status, createdOn, findUser.rows[0].userid]);
+      if (status === 'inbox') {
+        try {
+          await con.query(messageModel.addInbox, [findUser.rows[0].userid, messageId, createdOn]);
+        } catch (error) {
+          return res.status(400).json({
+            status: 500,
+            message: [error.detail],
+          });
+        }
+      } else if (status === 'sent') {
+        await con.query(messageModel.addSent, [findUser.rows[0].userid, messageId, createdOn]);
+      }
       return res.status(201).json({
         status: 201,
         data: [result.rows[0]],
       });
     }
-    return res.status(400).json({
-      status: 400,
-      data: ['error'],
+    return res.status(401).json({
+      status: 401,
+      data: ['please login first'],
     });
   }
 
@@ -42,6 +55,38 @@ class messageController {
     return res.status(200).json({
       status: 200,
       data: myMessages.rows,
+    });
+  }
+
+  static async showInboxMessages(req, res) {
+    const inboxOwner = await con.query(user.returnUser, [req.params.email]);
+    const messageIds = await con.query(messageModel.getInboxMessagesId, [inboxOwner.rows[0].userid]);
+    if (messageIds.rowCount !== 0) {
+      const inboxMessage = await con.query(messageModel.getInboxMessages, [inboxOwner.rows[0].userid]);
+      return res.status(200).json({
+        status: 200,
+        data: inboxMessage.rows,
+      });
+    }
+    return res.status(404).json({
+      status: 404,
+      data: 'your inbox is empty',
+    });
+  }
+
+  static async showSentMessages(req, res) {
+    const sentOwner = await con.query(user.returnUser, [req.params.email]);
+    const messageIds = await con.query(messageModel.getSentMessagesId, [sentOwner.rows[0].userid]);
+    if (messageIds.rowCount !== 0) {
+      const sentMessage = await con.query(messageModel.getSentMessages, [sentOwner.rows[0].userid]);
+      return res.status(200).json({
+        status: 200,
+        data: sentMessage.rows,
+      });
+    }
+    return res.status(404).json({
+      status: 404,
+      data: 'you have not sent any message',
     });
   }
 }
