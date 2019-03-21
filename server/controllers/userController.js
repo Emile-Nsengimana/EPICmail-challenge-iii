@@ -22,25 +22,11 @@ class userController {
     if (result.rowCount === 0) {
       return res.status(400).json({
         status: 400,
-        error: 'user already exist',
+        message: 'user already exist',
       });
     }
     return res.status(201).json({
       token: jsonToken,
-    });
-  }
-
-  static async deleteUser(req, res) {
-    const removeUserResult = await con.query(user.removeUser, [req.params.email]);
-    if (removeUserResult.rowCount === 0) {
-      return res.status(404).json({
-        status: 404,
-        message: 'User doesn\'t exist',
-      });
-    }
-    return res.status(200).json({
-      status: 201,
-      message: 'user removed',
     });
   }
 

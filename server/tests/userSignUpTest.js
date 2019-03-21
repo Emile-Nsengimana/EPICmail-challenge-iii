@@ -23,4 +23,22 @@ describe('User tests', () => {
       });
     done();
   });
+  it('should not be able to signup', (done) => {
+    const user = {
+      firstName: 'Peter',
+      lastName: 'Mark',
+      email: 'peter@epicmail.rw',
+      password: 'password',
+      phoneNo: '781234567',
+    };
+    chai.request(server)
+      .post('/api/v2/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        chai.expect(res.status).to.be.equal(400);
+        res.body.message.should.be('string');
+        res.body.message.should.be('user already exist');
+      });
+    done();
+  });
 });
