@@ -53,7 +53,6 @@ class userController {
       const loginToken = jwt.sign({ id: usrIds }, process.env.NEVERMIND, { expiresIn: '24h' });
       if (userLogin.rows[0].password === password) {
         return res.status(200).json({
-          status: 200,
           token: loginToken,
         });
       }
