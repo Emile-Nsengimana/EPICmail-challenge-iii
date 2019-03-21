@@ -84,5 +84,9 @@ class groupController {
       });
     }
   }
+//   static async addGroupMember (req, res){
+//       const findUser = await con.query(user.returnUser, [req.params.email]);
+
+//   }
 }
 export default groupController;
