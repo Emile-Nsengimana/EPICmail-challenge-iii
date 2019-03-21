@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import uuid from 'uuid/v4';
 import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import messageModel from '../models/message';
 import con from '../../connection';
@@ -19,12 +18,10 @@ class messageController {
       parentMessageId,
       status,
       email,
-      token,
     } = req.body;
 
-    const findUser = await con.query(user.returnUser, [email]);
-    const ownerId = jwt.sign(findUser.rows[0].userid, process.env.NEVERMIND);
-    if (ownerId === token) {
+    try {
+      const findUser = await con.query(user.returnUser, [email]);
       const result = await con.query(messageModel.addMessage, [messageId, subject, message, parentMessageId, status, createdOn, findUser.rows[0].userid]);
       if (status === 'inbox') {
         try {
@@ -37,40 +34,52 @@ class messageController {
         }
       } else if (status === 'sent') {
         await con.query(messageModel.addSent, [findUser.rows[0].userid, messageId, createdOn]);
-      }
-      return res.status(201).json({
+      } return res.status(201).json({
         status: 201,
         data: [result.rows[0]],
       });
+    } catch (error) {
+      return res.status(401).json({
+        status: 401,
+        error: 'please login first',
+      });
     }
-    return res.status(401).json({
-      status: 401,
-      data: ['please login first'],
-    });
   }
 
   static async userMessages(req, res) {
     const usrId = await con.query(user.returnUser, [req.params.email]);
-    const myMessages = await con.query(messageModel.returnMessages, [usrId.rows[0].userid]);
-    return res.status(200).json({
-      status: 200,
-      data: myMessages.rows,
+    if (usrId.rowCount !== 0) {
+      const myMessages = await con.query(messageModel.returnMessages, [usrId.rows[0].userid]);
+      return res.status(200).json({
+        status: 200,
+        data: myMessages.rows,
+      });
+    }
+    return res.status(404).json({
+      status: 404,
+      message: 'user with that email doesn\'t exist',
     });
   }
 
   static async showInboxMessages(req, res) {
     const inboxOwner = await con.query(user.returnUser, [req.params.email]);
-    const messageIds = await con.query(messageModel.getInboxMessagesId, [inboxOwner.rows[0].userid]);
-    if (messageIds.rowCount !== 0) {
-      const inboxMessage = await con.query(messageModel.getInboxMessages, [inboxOwner.rows[0].userid]);
-      return res.status(200).json({
-        status: 200,
-        data: inboxMessage.rows,
+    if (inboxOwner.rowCount !== 0) {
+      const messageIds = await con.query(messageModel.getInboxMessagesId, [inboxOwner.rows[0].userid]);
+      if (messageIds.rowCount !== 0) {
+        const inboxMessage = await con.query(messageModel.getInboxMessages, [inboxOwner.rows[0].userid]);
+        return res.status(200).json({
+          status: 200,
+          data: inboxMessage.rows,
+        });
+      }
+      return res.status(404).json({
+        status: 404,
+        message: 'your inbox is empty',
       });
     }
     return res.status(404).json({
       status: 404,
-      data: 'your inbox is empty',
+      message: 'user with that email doesn\'t exist',
     });
   }
 
@@ -86,7 +95,7 @@ class messageController {
     }
     return res.status(404).json({
       status: 404,
-      data: 'you have not sent any message',
+      message: 'you have not sent any message',
     });
   }
 }

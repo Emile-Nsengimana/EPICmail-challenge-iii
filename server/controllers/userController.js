@@ -10,6 +10,7 @@ dotenv.config();
 class userController {
   static async userSignup(req, res) {
     const userId = uuid();
+    const token = jwt.sign({ id: userId }, process.env.NEVERMIND, { expiresIn: '24h' });
     const {
       firstName,
       lastName,
@@ -21,13 +22,12 @@ class userController {
     if (result.rowCount === 0) {
       return res.status(400).json({
         status: 400,
-        message: 'Error',
+        error: 'user already exist',
       });
     }
-    const token = jwt.sign(userId, process.env.NEVERMIND);
     return res.status(201).json({
       status: 201,
-      data: [{ token }],
+      data: token,
     });
   }
 
@@ -36,12 +36,12 @@ class userController {
     if (removeUserResult.rowCount === 0) {
       return res.status(404).json({
         status: 404,
-        data: 'User doesn\'t exist',
+        message: 'User doesn\'t exist',
       });
     }
     return res.status(200).json({
       status: 201,
-      data: 'user removed',
+      message: 'user removed',
     });
   }
 
@@ -50,23 +50,21 @@ class userController {
     const userLogin = await con.query(user.returnUser, [email]);
     const usrIds = userLogin.rows[0].userid;
     if (userLogin.rowCount !== 0) {
-      const loginToken = jwt.sign(usrIds, process.env.NEVERMIND);
+      const loginToken = jwt.sign({ id: usrIds }, process.env.NEVERMIND, { expiresIn: '24h' });
       if (userLogin.rows[0].password === password) {
         return res.status(200).json({
           status: 200,
-          data: [{
-            token: loginToken,
-          }],
+          token: loginToken,
         });
       }
       return res.status(401).json({
         status: 401,
-        data: 'incorrect username or password',
+        error: 'incorrect email or password',
       });
     }
     return res.status(400).json({
       status: 400,
-      data: 'user doen\'t exist',
+      message: 'user doen\'t exist',
     });
   }
 }
