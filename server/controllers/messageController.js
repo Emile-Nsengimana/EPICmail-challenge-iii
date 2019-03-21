@@ -5,6 +5,7 @@ import moment from 'moment';
 import messageModel from '../models/message';
 import con from '../../connection';
 import user from '../models/user';
+import us from '../auth/auth';
 
 dotenv.config();
 
@@ -53,9 +54,9 @@ class messageController {
   }
 
   static async userMessages(req, res) {
-    const usrId = await con.query(user.returnUser, [req.params.email]);
-    if (usrId.rowCount !== 0) {
-      const myMessages = await con.query(messageModel.returnMessages, [usrId.rows[0].userid]);
+    const userNo = req.user.id;
+    const myMessages = await con.query(messageModel.returnMessages, [userNo]);
+    if (myMessages.rowCount !== 0) {
       return res.status(200).json({
         status: 200,
         data: myMessages.rows,
@@ -63,16 +64,15 @@ class messageController {
     }
     return res.status(404).json({
       status: 404,
-      message: 'user with that email doesn\'t exist',
+      message: 'you have no message',
     });
   }
 
   static async showInboxMessages(req, res) {
-    const inboxOwner = await con.query(user.returnUser, [req.params.email]);
-    if (inboxOwner.rowCount !== 0) {
-      const messageIds = await con.query(messageModel.getInboxMessagesId, [inboxOwner.rows[0].userid]);
+    if (req.user.id) {
+      const messageIds = await con.query(messageModel.getInboxMessagesId, [req.user.id]);
       if (messageIds.rowCount !== 0) {
-        const inboxMessage = await con.query(messageModel.getInboxMessages, [inboxOwner.rows[0].userid]);
+        const inboxMessage = await con.query(messageModel.getInboxMessages, [req.user.id]);
         return res.status(200).json({
           status: 200,
           data: inboxMessage.rows,
@@ -90,10 +90,9 @@ class messageController {
   }
 
   static async showSentMessages(req, res) {
-    const sentOwner = await con.query(user.returnUser, [req.params.email]);
-    const messageIds = await con.query(messageModel.getSentMessagesId, [sentOwner.rows[0].userid]);
+    const messageIds = await con.query(messageModel.getSentMessagesId, [req.user.id]);
     if (messageIds.rowCount !== 0) {
-      const sentMessage = await con.query(messageModel.getSentMessages, [sentOwner.rows[0].userid]);
+      const sentMessage = await con.query(messageModel.getSentMessages, [req.user.id]);
       return res.status(200).json({
         status: 200,
         data: sentMessage.rows,
@@ -102,6 +101,34 @@ class messageController {
     return res.status(404).json({
       status: 404,
       message: 'you have not sent any message',
+    });
+  }
+
+  static async showReadMessages(req, res) {
+    const readMessage = await con.query(messageModel.getReadMessages, [req.user.id]);
+    if (readMessage.rowCount) {
+      return res.status(200).json({
+        status: 200,
+        data: readMessage.rows,
+      });
+    }
+    return res.status(404).json({
+      status: 404,
+      message: 'you have no message',
+    });
+  }
+
+  static async showUnreadMessages(req, res) {
+    const unreadMessage = await con.query(messageModel.getUnreadMessages, [req.user.id]);
+    if (unreadMessage.rowCount) {
+      return res.status(200).json({
+        status: 200,
+        data: unreadMessage.rows,
+      });
+    }
+    return res.status(404).json({
+      status: 404,
+      message: 'you have no unread message',
     });
   }
 }
