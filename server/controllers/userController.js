@@ -10,7 +10,7 @@ dotenv.config();
 class userController {
   static async userSignup(req, res) {
     const userId = uuid();
-    const token = jwt.sign({ id: userId }, process.env.NEVERMIND, { expiresIn: '24h' });
+    const jsonToken = jwt.sign({ id: userId }, process.env.NEVERMIND, { expiresIn: '24h' });
     const {
       firstName,
       lastName,
@@ -26,8 +26,7 @@ class userController {
       });
     }
     return res.status(201).json({
-      status: 201,
-      data: token,
+      token: jsonToken,
     });
   }
 
