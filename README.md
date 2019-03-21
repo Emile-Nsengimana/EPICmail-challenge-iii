@@ -31,9 +31,10 @@ npm test
 | `/api/v2/auth/signup` | POST | user signup |
 | `/api/v2/auth/login` | POST | user login |
 | `/api/v2/messages` | POST | send message |
-| `/api/v2/messages/:email` | GET | display user's email |
-| `/api/v2/messages/inbox/:email` | GET | display user's inbox message(s) |
-| `/api/v2/messages/sent/:email` | GET | display user's sent message(s) |
+| `/api/v2/messages/inbox/` | GET | display user's inbox message(s) |
+| `/api/v2/messages/sent/` | GET | display user's sent message(s) |
+| `/api/v2/messages/unread/` | GET | display user's unread message(s) |
+| `/api/v2/messages/read/` | GET | display user's read message(s) |
 
 
 ### HOW CAN IT BE MANUAL TESTED
