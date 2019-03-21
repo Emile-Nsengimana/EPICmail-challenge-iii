@@ -60,6 +60,9 @@ const getInboxMessages = 'select * from message where status=\'inbox\' and useri
 
 const getSentMessagesId = 'select messageid from sentMessage where senderid = ($1)';
 const getSentMessages = 'select * from message where status=\'sent\' and userid=($1)';
+const getReadMessages = 'select * from message where status=\'read\' and userid=($1)';
+const getUnreadMessages = 'select * from message where status=\'unread\' and userid=($1)';
+
 
 export default {
   messageTable,
@@ -73,4 +76,6 @@ export default {
   getInboxMessages,
   getSentMessages,
   getSentMessagesId,
+  getReadMessages,
+  getUnreadMessages,
 };
