@@ -4,7 +4,7 @@
   "description": "A web app for exchanging email",
   "main": "app.js",
   "scripts": {
-    "start": "babel-node --require babel-polyfill app.js",
+    "start": "nodemon --require babel-polyfill app.js",
     "create-db": "nodemon db.js",
     "test": "nyc --reporter=html --reporter=text mocha  --require babel-polyfill --require babel-register --timeout 10000 --exit  server/tests",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
@@ -35,13 +35,13 @@
     "pg": "^7.9.0",
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "nodemon": "^1.18.10"
   },
   "devDependencies": {
     "coveralls": "^3.0.3",
     "eslint": "^5.15.2",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "nodemon": "^1.18.10"
+    "eslint-plugin-import": "^2.16.0"    
   }
 }
