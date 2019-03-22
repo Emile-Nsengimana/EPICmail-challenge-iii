@@ -33,22 +33,24 @@ class userController {
   static async login(req, res) {
     const { email, password } = req.body;
     const userLogin = await con.query(user.returnUser, [email]);
-    const usrIds = userLogin.rows[0].userid;
     if (userLogin.rowCount !== 0) {
-      const loginToken = jwt.sign({ id: usrIds }, process.env.NEVERMIND, { expiresIn: '24h' });
-      if (userLogin.rows[0].password === password) {
-        return res.status(200).json({
-          token: loginToken,
+      const usrIds = userLogin.rows[0].userid;
+      if (userLogin.rowCount !== 0) {
+        const loginToken = jwt.sign({ id: usrIds }, process.env.NEVERMIND, { expiresIn: '24h' });
+        if (userLogin.rows[0].password === password) {
+          return res.status(200).json({
+            token: loginToken,
+          });
+        }
+        return res.status(401).json({
+          status: 401,
+          error: 'incorrect password',
         });
       }
-      return res.status(401).json({
-        status: 401,
-        error: 'incorrect email or password',
-      });
     }
     return res.status(400).json({
       status: 400,
-      message: 'user doen\'t exist',
+      message: 'this account doesn\'t exist. please signup first',
     });
   }
 }

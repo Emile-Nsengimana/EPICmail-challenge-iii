@@ -22,5 +22,6 @@ router.post('/api/v2/groups', auth, groupController.createGroup);
 router.get('/api/v2/groups', auth, groupController.showGroups);
 router.get('/api/v2/groups/:groupId', auth, groupController.getGroup);
 router.delete('/api/v2/groups/:groupId', auth, groupController.deleteGroup);
+router.patch('/api/v2/groups/:groupId/:groupName', auth, groupController.updateGroupName);
 
 export default router;

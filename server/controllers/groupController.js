@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import con from '../../connection';
 import groupModel from '../models/group';
-import user from '../models/user';
 
 class groupController {
   static async createGroup(req, res) {
@@ -10,7 +9,7 @@ class groupController {
       role,
     } = req.body;
     try {
-      const result = await con.query(groupModel.insertInGroup, [groupName, role]);
+      const result = await con.query(groupModel.insertInGroup, [groupName, role, req.user.id]);
       if (result.rowCount !== 0) {
         return res.status(201).json({
           status: 201,
@@ -66,27 +65,51 @@ class groupController {
 
   static async deleteGroup(req, res) {
     try {
-      const findGroup = await con.query(groupModel.deleteGroup, [req.params.groupId]);
+      const findGroup = await con.query(groupModel.getOne, [req.params.groupId]);
       if (findGroup.rowCount !== 0) {
-        return res.status(200).json({
-          status: 200,
-          data: ['group deleted'],
+        if (findGroup.rows[0].admin === req.user.id) {
+          await con.query(groupModel.deleteGroup, [req.params.groupId]);
+          return res.status(200).json({
+            status: 200,
+            message: 'group deleted',
+          });
+        }
+        return res.status(401).json({
+          status: 401,
+          message: 'you are not allowed to delete this group!',
         });
       }
-      return res.status(404).json({
-        status: 404,
-        data: ['Group not found'],
-      });
     } catch (error) {
       return res.status(500).json({
         status: 500,
-        data: [error.detail],
+        error: [error.detail],
       });
     }
+    return res.status(500).json({
+      status: 500,
+      error: 'unknown error',
+    });
   }
-//   static async addGroupMember (req, res){
-//       const findUser = await con.query(user.returnUser, [req.params.email]);
 
-//   }
+  static async updateGroupName(req, res) {
+    const findGroup = await con.query(groupModel.getOne, [req.params.groupId]);
+    if (findGroup.rowCount !== 0) {
+      const updateGroup = await con.query(groupModel.updateGroupName, [req.params.groupName, req.params.groupId, req.user.id]);
+      if (updateGroup.rowCount !== 0) {
+        return res.status(200).json({
+          status: 200,
+          message: `group name changed to ${req.params.groupName}`,
+        });
+      }
+      return res.status(401).json({
+        status: 401,
+        message: 'you are not allowed to change group name',
+      });
+    }
+    return res.status(404).json({
+      status: 404,
+      message: 'group not found',
+    });
+  }
 }
 export default groupController;
