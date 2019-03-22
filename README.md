@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/Emile-Nsengimana/EPICmail-challenge-iii.svg?branch=develop)](https://travis-ci.com/Emile-Nsengimana/EPICmail-challenge-iii) [![Coverage Status](https://coveralls.io/repos/github/Emile-Nsengimana/EPICmail-challenge-iii/badge.svg?branch=develop)](https://coveralls.io/github/Emile-Nsengimana/EPICmail-challenge-iii?branch=develop)
+[![Build Status](https://travis-ci.com/Emile-Nsengimana/EPICmail-challenge-iii.svg?branch=develop)](https://travis-ci.com/Emile-Nsengimana/EPICmail-challenge-iii) [![Coverage Status](https://coveralls.io/repos/github/Emile-Nsengimana/EPICmail-challenge-iii/badge.svg?branch=develop)](https://coveralls.io/github/Emile-Nsengimana/EPICmail-challenge-iii?branch=develop) <a href="https://codeclimate.com/github/Emile-Nsengimana/EPICmail-challenge-iii/maintainability"><img src="https://api.codeclimate.com/v1/badges/4e1ded14dcc8fa7e25bf/maintainability" /></a>
 # EPICmail
 Is a web app that helps people exchange messages/information over the internet.
 #### Heroku(https://challenge-iii.herokuapp.com)
