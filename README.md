@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.com/Emile-Nsengimana/EPICmail-challenge-iii.svg?branch=develop)](https://travis-ci.com/Emile-Nsengimana/EPICmail-challenge-iii) [![Coverage Status](https://coveralls.io/repos/github/Emile-Nsengimana/EPICmail-challenge-iii/badge.svg?branch=develop)](https://coveralls.io/github/Emile-Nsengimana/EPICmail-challenge-iii?branch=develop)
 # EPICmail
 Is a web app that helps people exchange messages/information over the internet.
+#### Heroku(https://challenge-iii.herokuapp.com)
 ### Requirements
 
 - `Nodejs` - a JavaScript run-time environment that executes JavaScript code outside of a browser
@@ -43,3 +44,4 @@ npm test
 
 ### HOW CAN IT BE MANUAL TESTED
 - Use [postman](https://www.getpostman.com/downloads/) to test out the API endpoints
+- Use the heroku link to test this API endpoints
