@@ -35,7 +35,11 @@ npm test
 | `/api/v2/messages/sent/` | GET | display user's sent message(s) |
 | `/api/v2/messages/unread/` | GET | display user's unread message(s) |
 | `/api/v2/messages/read/` | GET | display user's read message(s) |
-
+| `/api/v2/groups/` | POST | create a group |
+| `/api/v2/groups/` | GET | display all groups |
+| `/api/v2/groups/<groupId>` | GET | display specific group info |
+| `/api/v2/groups/<groupId>` | DELETE | delete a specific group |
+| `/api/v2/groups/<groupId>/<groupName>` | PATCH | change group name |
 
 ### HOW CAN IT BE MANUAL TESTED
 - Use [postman](https://www.getpostman.com/downloads/) to test out the API endpoints
