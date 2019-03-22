@@ -4,7 +4,7 @@
   "description": "A web app for exchanging email",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --require babel-polyfill app.js",
+    "start": "babel-node --require babel-polyfill app.js",
     "create-db": "nodemon db.js",
     "test": "nyc --reporter=html --reporter=text mocha  --require babel-polyfill --require babel-register --timeout 10000 --exit  server/tests",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
