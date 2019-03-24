@@ -18,7 +18,7 @@ describe('Message tests', () => {
     };
     chai.request(server)
       .post('/api/v2/messages')
-      .send(message).set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImExOTgxNmQwLWJiOTAtNDZkOC1iNDEyLTdiMGU3ZThjY2Y0NiIsImlhdCI6MTU1MzE3ODg2NywiZXhwIjoxNTUzMjY1MjY3fQ.12Dcm0WS-RqB0UZiSZcPlCdZEEoE3MXciGWbW_ze858')
+      .send(message).set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImExOTgxNmQwLWJiOTAtNDZkOC1iNDEyLTdiMGU3ZThjY2Y0NiIsImlhdCI6MTU1MzQ1NDM5NiwiZXhwIjoxNTUzNTQwNzk2fQ.xkWbmnPj5DZWFwYThNffEMPaYofW9y6ax9FvrxZjnMs')
       .end((err, res) => {
         chai.expect(res.body).to.be.a('object');
         chai.expect(res.statusCode).to.be.equal(201);
