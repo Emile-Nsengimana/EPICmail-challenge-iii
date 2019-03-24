@@ -15,7 +15,7 @@ describe('Group tests', () => {
     };
     chai.request(server)
       .post('/api/v2/groups')
-      .send(newGroup).set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc5MGMyMTk2LTRjZTctNDljMi1iMzdkLTkwMWNmYzdlMmQ5ZCIsImlhdCI6MTU1MzIzNTAwMCwiZXhwIjoxNTUzMzIxNDAwfQ.t0lr4xj3kZwv6FsrU8Jn3EYoNV7lz-ki2O0TaDeTdGQ')
+      .send(newGroup).set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImExOTgxNmQwLWJiOTAtNDZkOC1iNDEyLTdiMGU3ZThjY2Y0NiIsImlhdCI6MTU1MzQ1NDM5NiwiZXhwIjoxNTUzNTQwNzk2fQ.xkWbmnPj5DZWFwYThNffEMPaYofW9y6ax9FvrxZjnMs')
       .end((err, res) => {
         chai.expect(res.body).to.be.a('object');
         chai.expect(res.statusCode).to.be.equal(201);
@@ -29,7 +29,7 @@ describe('Group tests', () => {
   it('should be able to display all groups', (done) => {
     chai.request(server)
       .get('/api/v2/groups')
-      .set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc5MGMyMTk2LTRjZTctNDljMi1iMzdkLTkwMWNmYzdlMmQ5ZCIsImlhdCI6MTU1MzIzNTAwMCwiZXhwIjoxNTUzMzIxNDAwfQ.t0lr4xj3kZwv6FsrU8Jn3EYoNV7lz-ki2O0TaDeTdGQ')
+      .set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImExOTgxNmQwLWJiOTAtNDZkOC1iNDEyLTdiMGU3ZThjY2Y0NiIsImlhdCI6MTU1MzQ1NDM5NiwiZXhwIjoxNTUzNTQwNzk2fQ.xkWbmnPj5DZWFwYThNffEMPaYofW9y6ax9FvrxZjnMs')
       .end((err, res) => {
         chai.expect(res.statusCode).to.be.equal(200);
         chai.expect(res.body).to.be.a('object');
@@ -39,7 +39,7 @@ describe('Group tests', () => {
   it('should be able to display a specified group', (done) => {
     chai.request(server)
       .get('/api/v2/groups/new group2')
-      .set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc5MGMyMTk2LTRjZTctNDljMi1iMzdkLTkwMWNmYzdlMmQ5ZCIsImlhdCI6MTU1MzIzNTAwMCwiZXhwIjoxNTUzMzIxNDAwfQ.t0lr4xj3kZwv6FsrU8Jn3EYoNV7lz-ki2O0TaDeTdGQ')
+      .set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImExOTgxNmQwLWJiOTAtNDZkOC1iNDEyLTdiMGU3ZThjY2Y0NiIsImlhdCI6MTU1MzQ1NDM5NiwiZXhwIjoxNTUzNTQwNzk2fQ.xkWbmnPj5DZWFwYThNffEMPaYofW9y6ax9FvrxZjnMs')
       .end((err, res) => {
         res.body.message.should.be.a('string');
         done();
@@ -48,7 +48,7 @@ describe('Group tests', () => {
   it('should not be able to remove group', (done) => {
     chai.request(server)
       .delete('/api/v2/groups/4')
-      .set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMjdmNTk5LWY0MDEtNGRmNS05Y2JkLTk0NGI3MTQ1YjllMyIsImlhdCI6MTU1MzI0Mjg4NCwiZXhwIjoxNTUzMzI5Mjg0fQ.y-AAIcgnJhaw6s4ahuKuwiFIkiZHgWFRACxuPSQfXYQ')
+      .set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImExOTgxNmQwLWJiOTAtNDZkOC1iNDEyLTdiMGU3ZThjY2Y0NiIsImlhdCI6MTU1MzQ1NDM5NiwiZXhwIjoxNTUzNTQwNzk2fQ.xkWbmnPj5DZWFwYThNffEMPaYofW9y6ax9FvrxZjnMs')
       .end((err, res) => {
         chai.expect(res.statusCode).to.be.equal(401);
         res.body.message.should.be.a('string');
