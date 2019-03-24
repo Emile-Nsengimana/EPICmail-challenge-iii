@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>7/7</span>
+        <span class='fraction'>8/8</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>7/7</span>
+        <span class='fraction'>8/8</span>
       </div>
     </div>
     <p class="quiet">
@@ -154,7 +154,35 @@
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -163,6 +191,32 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -269,6 +323,7 @@ import moment from 'moment';
 import messageModel from '../models/message';
 import con from '../../connection';
 import user from '../models/user';
+import us from '../auth/auth';
 &nbsp;
 dotenv.config();
 &nbsp;
@@ -317,9 +372,9 @@ class messageController {
   }
 &nbsp;
   static async userMessages(req, res) {
-    const usrId = await con.query(user.returnUser, [req.params.email]);
-    if (usrId.rowCount !== 0) {
-      const myMessages = await con.query(messageModel.returnMessages, [usrId.rows[0].userid]);
+    const userNo = req.user.id;
+    const myMessages = await con.query(messageModel.returnMessages, [userNo]);
+    if (myMessages.rowCount !== 0) {
       return res.status(200).json({
         status: 200,
         data: myMessages.rows,
@@ -327,16 +382,15 @@ class messageController {
     }
     return res.status(404).json({
       status: 404,
-      message: 'user with that email doesn\'t exist',
+      message: 'you have no message',
     });
   }
 &nbsp;
   static async showInboxMessages(req, res) {
-    const inboxOwner = await con.query(user.returnUser, [req.params.email]);
-    if (inboxOwner.rowCount !== 0) {
-      const messageIds = await con.query(messageModel.getInboxMessagesId, [inboxOwner.rows[0].userid]);
+    if (req.user.id) {
+      const messageIds = await con.query(messageModel.getInboxMessagesId, [req.user.id]);
       if (messageIds.rowCount !== 0) {
-        const inboxMessage = await con.query(messageModel.getInboxMessages, [inboxOwner.rows[0].userid]);
+        const inboxMessage = await con.query(messageModel.getInboxMessages, [req.user.id]);
         return res.status(200).json({
           status: 200,
           data: inboxMessage.rows,
@@ -354,10 +408,9 @@ class messageController {
   }
 &nbsp;
   static async showSentMessages(req, res) {
-    const sentOwner = await con.query(user.returnUser, [req.params.email]);
-    const messageIds = await con.query(messageModel.getSentMessagesId, [sentOwner.rows[0].userid]);
+    const messageIds = await con.query(messageModel.getSentMessagesId, [req.user.id]);
     if (messageIds.rowCount !== 0) {
-      const sentMessage = await con.query(messageModel.getSentMessages, [sentOwner.rows[0].userid]);
+      const sentMessage = await con.query(messageModel.getSentMessages, [req.user.id]);
       return res.status(200).json({
         status: 200,
         data: sentMessage.rows,
@@ -368,6 +421,34 @@ class messageController {
       message: 'you have not sent any message',
     });
   }
+&nbsp;
+  static async showReadMessages(req, res) {
+    const readMessage = await con.query(messageModel.getReadMessages, [req.user.id]);
+    if (readMessage.rowCount) {
+      return res.status(200).json({
+        status: 200,
+        data: readMessage.rows,
+      });
+    }
+    return res.status(404).json({
+      status: 404,
+      message: 'you have no message',
+    });
+  }
+&nbsp;
+  static async showUnreadMessages(req, res) {
+    const unreadMessage = await con.query(messageModel.getUnreadMessages, [req.user.id]);
+    if (unreadMessage.rowCount) {
+      return res.status(200).json({
+        status: 200,
+        data: unreadMessage.rows,
+      });
+    }
+    return res.status(404).json({
+      status: 404,
+      message: 'you have no unread message',
+    });
+  }
 }
 export default messageController;
 &nbsp;</pre></td></tr>
@@ -376,7 +457,7 @@ export default messageController;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Mar 21 2019 15:19:13 GMT+0200 (Central Africa Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Mar 22 2019 11:21:55 GMT+0200 (Central Africa Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>
